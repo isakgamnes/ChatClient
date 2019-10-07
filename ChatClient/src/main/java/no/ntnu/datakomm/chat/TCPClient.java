@@ -217,7 +217,6 @@ public class TCPClient {
         while (isConnectionActive())
         {
             String serverResponse = waitServerResponse();
-            System.out.println(serverResponse);
 
 
             if (serverResponse != null)
