@@ -57,6 +57,16 @@ public class TCPClient {
      * that no two threads call this method in parallel.
      */
     public synchronized void disconnect() {
+        try
+        {
+            connection.close();
+            onDisconnect();
+            connection = null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         // TODO Step 4: implement this method
         // Hint: remember to check if connection is active
     }
@@ -206,7 +216,7 @@ public class TCPClient {
             if (serverResponse != null)
             {
                 String[] responsePart = serverResponse.split(" ", 2);
-                
+
                 switch (responsePart[0])
                 {
                     case "loginok":
@@ -236,6 +246,10 @@ public class TCPClient {
 
                 // TODO Step 8: add support for incoming supported command list (type: supported)
 
+            }
+            else
+            {
+                disconnect();
             }
         }
     }
@@ -284,6 +298,10 @@ public class TCPClient {
      * Internet error)
      */
     private void onDisconnect() {
+        for(ChatListener l : listeners)
+        {
+            l.onDisconnect();
+        }
         // TODO Step 4: Implement this method
         // Hint: all the onXXX() methods will be similar to onLoginResult()
     }
