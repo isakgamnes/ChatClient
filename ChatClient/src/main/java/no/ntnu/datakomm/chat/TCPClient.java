@@ -200,24 +200,43 @@ public class TCPClient {
      * the connection is closed.
      */
     private void parseIncomingCommands() {
-        while (isConnectionActive()) {
-            // TODO Step 3: Implement this method
-            // Hint: Reuse waitServerResponse() method
-            // Hint: Have a switch-case (or other way) to check what type of response is received from the server
-            // and act on it.
-            // Hint: In Step 3 you need to handle only login-related responses.
-            // Hint: In Step 3 reuse onLoginResult() method
+        while (isConnectionActive())
+        {
+            String serverResponse = waitServerResponse();
+            if (serverResponse != null)
+            {
+                String[] responsePart = serverResponse.split(" ", 2);
+                
+                switch (responsePart[0])
+                {
+                    case "loginok":
+                        onLoginResult(true, null);
+                        break;
 
-            // TODO Step 5: update this method, handle user-list response from the server
-            // Hint: In Step 5 reuse onUserList() method
 
-            // TODO Step 7: add support for incoming chat messages from other users (types: msg, privmsg)
-            // TODO Step 7: add support for incoming message errors (type: msgerr)
-            // TODO Step 7: add support for incoming command errors (type: cmderr)
-            // Hint for Step 7: call corresponding onXXX() methods which will notify all the listeners
+                    case "loginerr":
+                        onLoginResult(false, responsePart[1]);
+                        break;
+                }
 
-            // TODO Step 8: add support for incoming supported command list (type: supported)
+                // TODO Step 3: Implement this method
+                // Hint: Reuse waitServerResponse() method
+                // Hint: Have a switch-case (or other way) to check what type of response is received from the server
+                // and act on it.
+                // Hint: In Step 3 you need to handle only login-related responses.
+                // Hint: In Step 3 reuse onLoginResult() method
 
+                // TODO Step 5: update this method, handle user-list response from the server
+                // Hint: In Step 5 reuse onUserList() method
+
+                // TODO Step 7: add support for incoming chat messages from other users (types: msg, privmsg)
+                // TODO Step 7: add support for incoming message errors (type: msgerr)
+                // TODO Step 7: add support for incoming command errors (type: cmderr)
+                // Hint for Step 7: call corresponding onXXX() methods which will notify all the listeners
+
+                // TODO Step 8: add support for incoming supported command list (type: supported)
+
+            }
         }
     }
 
