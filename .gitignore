@@ -1,0 +1,6 @@
+
+ChatClient/.idea/
+
+*.class
+
+ChatClient/target/classes/
