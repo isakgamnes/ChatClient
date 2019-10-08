@@ -15,6 +15,7 @@ public class TCPClient {
 
     private final List<ChatListener> listeners = new LinkedList<>();
 
+    private final String[] commands = {"supported", "msg", "privmsg", "users", "help"};
     /**
      * Connect to a chat server.
      *
@@ -136,7 +137,7 @@ public class TCPClient {
 
         // TODO Step 5: implement this method
         // Hint: Use Wireshark and the provided chat client reference app to find out what commands the
-        // client and server exchange for user listing.
+        // client and server exchange for user listing. System.out.println("tiss");
     }
 
     /**
@@ -159,6 +160,7 @@ public class TCPClient {
      * Send a request for the list of commands that server supports.
      */
     public void askSupportedCommands() {
+        sendCommand("help");
         // TODO Step 8: Implement this method
         // Hint: Reuse sendCommand() method
     }
@@ -263,6 +265,10 @@ public class TCPClient {
 
                     case "cmderr":
                         onCmdError(responsePart[1]);
+                        break;
+
+                    case "supported":
+                        onSupported(commands);
                         break;
                 }
 
@@ -408,6 +414,10 @@ public class TCPClient {
      * @param commands Commands supported by the server
      */
     private void onSupported(String[] commands) {
+        for(ChatListener l : listeners)
+        {
+            l.onSupportedCommands(commands);
+        }
         // TODO Step 8: Implement this method
     }
 }
